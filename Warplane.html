@@ -1,0 +1,488 @@
+<html>
+    <head>
+        <title>XJ's Warplane Game</title>
+    </head>
+  
+    <style>
+      
+    body {
+        margin:0;
+        padding-top:2vh;
+        background-color: black;
+        color:cornsilk;
+    }
+
+    canvas{
+        margin-bottom:50px;
+    }
+
+    button{
+    
+        padding:5px;
+        font-weight:bolder;
+        height:50px;
+        width 50px;
+        border:none;
+        background-color: blue;
+        color:white;
+        outline-color:transparent;
+        border-radius:50%
+    }    
+
+   .control{
+        padding-left:10%    
+    }   
+      
+    .control button:nth-child(3){
+        margin-left:30%;
+        height :70px;
+        width:70px;
+        border-radius:45%; 
+        padding:1px;
+        border:none;
+        background-color:blue;
+        color:white;
+        outline-color:transparent;    
+    }  
+        
+    .header{
+        width :100%
+        height:5vh;  
+    }  
+
+    .header .side{
+        float:left;
+        text-align:center;
+    }
+  
+    .header .side:nth-child(2){
+        margin-left:32%;
+        margin-right:2%;
+    }  
+
+
+    .header span:nth-child(1){
+        background-color:blue;
+        color:white;   
+        margin-left:2px;    
+    }  
+
+    .header .side:nth-child(2) span{
+        background-color:green;
+        color:white;   
+    }   
+
+    .header .side:nth-child(3) span{
+        background-color:red;
+        color:white;         
+    }  
+
+    <-- created by XJ -->
+
+    </style>
+    <body>
+  
+     <div class ="header">
+       
+         <div class="side">
+     <span>Your life</span><div></div></div>
+   
+     <div class="side">
+    <span>Level</span>   
+     <div>1</div>  
+       
+     </div>
+ 
+     <div class="side"><span>XJ's life</span><div></div></div>
+   
+     
+    <canvas></canvas>
+  
+<div class = "control">
+<button>Left</button>
+<button>Right</button>
+    <button>Shoot</button></div>
+ 
+   <script>
+
+var div = document.getElementsByTagName("div"),
+shotTimer = 0,
+level = 5;
+eneLife = 500,
+  clickCount = 0,
+  levelAssigner = 1;
+     
+var can = document.getElementsByTagName("canvas")[0];
+var ctx = can.getContext("2d");
+can.height = window.innerHeight - 200;
+can.width = window.innerWidth;
+function drawRect(x ,y , w ,h , color){
+  
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.spedX = 10;
+    this.spedY = 10;
+this.color = color;
+this.defCol ;
+this.temporaryColor = function(col){
+
+   this.color  = col  
+var j = this 
+  setTimeout(function(){
+   
+    j.color =  j.defCol
+    
+  }, 200)
+  
+  
+}
+    this.draw = function(type) {
+   
+ 
+    if(type == "droneUp"){
+
+       
+  ctx.fillStyle = this.color;
+ctx.fillRect(this.x + (this.w/2)-5 , this.y-10 , 10 , 10) ;       
+ctx.fillRect(this.x , this.y , this.w , 10)      
+ 
+  ctx.fillRect(this.x , this.y+10 , 10 , 10)      
+     
+ctx.fillRect(this.x +(this.w -10), this.y+10 , 10 , 10)      
+     
+     
+      
+    }
+  
+  
+    if(type == "droneDown"){
+      
+  ctx.fillStyle = this.color;
+        
+  
+    ctx.fillRect(this.x , this.y , 10 , 10)      
+     
+ctx.fillRect(this.x +(this.w -10), this.y , 10 , 10)
+ctx.fillRect(this.x , this.y+10 , this.w , 10)       
+    
+ctx.fillRect(this.x + (this.w/2)-5 , this.h-10, 10 , 10)      
+  
+    }
+  
+  
+  
+  
+  
+if(type == undefined){     
+ctx.fillStyle = this.color;
+ctx.fillRect(this.x , this.y , this.w , this.h)     
+      
+   } 
+ 
+   
+    }
+   
+     this.updateUp = function(){
+       
+      this.y -= this.spedY 
+       
+       
+     }
+   
+   
+     this.updateDown = function(){
+       
+       this.y += this.spedY 
+       
+     }
+   
+     this.updateSide = () => {
+       
+    if(this.x >= (can.width - this.w) || this.x <= 0){
+     
+       this.spedX = -this.spedX
+      
+      
+    }   
+  
+    this.x -= this.spedX
+       
+     }
+   
+   
+   
+     this.upCollision = (enemy) => {
+   
+   if((((this.y <= enemy.y + enemy.h) && (this.y  >= 0)) && ((this.x + this.w >= enemy.x )   && (this.x) <= (enemy.x+enemy.w))) && this.color != "transparent" ){
+     
+     enemy.life -= 20;
+      enemy.temporaryColor("blue")
+      this.color = "transparent"
+       delete enemy;
+   }    
+       
+       
+       //
+       
+     }
+   
+   
+     this.dCollision = function(enemy){
+       
+    
+  if((((this.y + this.w) >= enemy.y && (this.y+ this.h) <= (enemy.y + this.spedY ) )  && (this.x + this.w >= enemy.x && (this.x) <= (enemy.x+enemy.w)))   && this.color != "transparent"  ){
+
+      this.color = "transparent"
+     enemy.life -= 10;
+      enemy.temporaryColor("brown")
+       delete enemy;
+   }    
+           
+    
+    
+       
+       
+     }
+   
+   
+  this.collideWithBul = function(enemyArray){
+    
+    
+for(let f = 0; f < enemyArray.length; f++ ){
+   
+   
+     if((((this.y <= enemyArray[f].y + enemyArray[f].spedY) && (this.y  >= enemyArray[f].y)) && ((this.x + this.w >= enemyArray[f].x )   && (this.x) <= (enemyArray[f].x+enemyArray[f].w))) && this.color != "transparent" && enemyArray[f].color != "transparent" ){
+     
+   
+      this.color = "transparent";
+      enemyArray[f].color = "transparent"
+       delete enemy;
+   }    
+   
+   
+   
+   
+}      
+    
+  } 
+   
+   
+   
+}    
+     
+
+
+ 
+  var actor = new drawRect((can.width /2) -40 , can.height-20 , 30, 30 , "blue");
+
+  actor.life = 10;
+  actor.defCol = "blue";
+
+
+ 
+var actGun = [];
+var enemyGun = [];
+function enemyShooting( type , gunShutter , size , amount){
+   
+   for(let h = 0; h < amount; h++ ){
+  if(gunShutter.y < size){
+    
+    type.push(new drawRect((gunShutter.x + (gunShutter.w /2))-5, gunShutter.y + size +20, 10 , size , "red"))  
+      type[h].spedY = 50;
+    
+    
+  }  
+     
+    else{
+    type.push(new drawRect(gunShutter.x+(gunShutter.w/2)-5 , gunShutter.y - size , 10 , size , "blue")) 
+     
+      type[h].spedY = 15;
+  
+     
+     }
+     
+   }
+   
+   
+}
+ 
+   function shoot( time){
+ 
+  if(((enemy.x + enemy.w) >= actor.x ) && (enemy.x <= actor.x + actor.w)){
+
+if(shotTimer > 2 ){
+
+enemyShooting(enemyGun , enemy , 10, 1);
+shotTimer = 0
+}
+  }
+    
+     
+   }
+ 
+ 
+ 
+var enemy = new drawRect((can.width/2) - 50 , 0 , 30 , 30 , "red");
+enemy.spedX = 20;
+enemy.defCol = "red";
+enemy.life = 500;
+enemy.spedX = 5
+var levelchanger = function() {
+  
+    if(actor.life <= 0){
+ 
+      clearInterval(c);
+    
+      actor.life = 40;
+    
+      alert("Game Over, XJ won the game");
+      var w = alert("Do you wish to play again?");
+      if(w == true){
+var c =  setInterval(function(){
+   
+     ctx.clearRect(0,0,can.width ,can.height);
+     actor.draw("droneUp");
+   
+   
+     enemy.draw("droneDown");
+   
+   
+   shoot(level)
+ 
+
+     for(let j = 0; j< enemyGun.length; j++){
+         enemyGun[j].draw();
+         enemyGun[j].updateDown();
+         enemyGun[j].dCollision(actor);
+     }
+   
+   
+  if(actGun.length > 0){
+    
+    
+   for(let j = 0; j< actGun.length; j++){
+         actGun[j].draw();
+         actGun[j].updateUp(); 
+     actGun[j].upCollision(enemy)
+     actGun[j].collideWithBul(enemyGun)
+  } 
+    }
+     levelchanger();
+   
+     enemy.updateSide()
+    div[2].innerHTML = actor.life
+     div[4].innerHTML = levelAssigner
+     div[6].innerHTML = enemy.life
+     shotTimer++;
+     clickCount++;
+   
+} , 100) ;
+      
+        
+        
+        
+      }
+      
+      
+    }
+  
+    else if(eneLife - 100 == enemy.life){
+      
+    levelAssigner++
+    level--  
+       eneLife -= 100;
+  
+       enemy.spedX += 5
+  
+    }
+  
+  
+    else if(enemy.life <= 0){
+      
+       clearInterval(c);
+    
+      alert("You win")
+       alert("Message from XJ:\nI can not believe you spent so long playing this stupid game!")
+      
+      
+    }
+  
+  
+}
+
+var c =  setInterval(function(){
+   
+     ctx.clearRect(0,0,can.width ,can.height);
+     actor.draw("droneUp");
+   
+   
+     enemy.draw("droneDown");
+   
+   
+   shoot(level)
+ 
+
+     for(let j = 0; j< enemyGun.length; j++){
+         enemyGun[j].draw();
+         enemyGun[j].updateDown();
+         enemyGun[j].dCollision(actor);
+     }
+   
+   
+  if(actGun.length > 0){
+    
+    
+   for(let j = 0; j< actGun.length; j++){
+         actGun[j].draw();
+         actGun[j].updateUp(); 
+     actGun[j].upCollision(enemy)
+     actGun[j].collideWithBul(enemyGun)
+  } 
+    }
+     levelchanger();
+   
+     enemy.updateSide()
+    div[2].innerHTML = actor.life
+     div[4].innerHTML = levelAssigner
+     div[6].innerHTML = enemy.life
+     shotTimer++;
+     clickCount++;
+   
+} , 100) ;
+var btn = document.getElementsByTagName("button");
+btn[0].onclick = function(){
+   
+   
+     actor.x -= 15;
+}
+btn[1].onclick = function(){
+   
+   
+     actor.x += 15;
+}
+btn[2].onclick = function(){
+if(clickCount > 2){  
+  enemyShooting(actGun , actor , 10 , 1);
+  clickCount = 0
+  } 
+   
+   
+}
+can.ontouchstart = function(ev){
+     
+     
+     actor.x = ev.touches[0].pageX
+    
+}
+     
+   </script> 
+    
+       
+    </body>
+    <br>
+    <div style="background-color:green;color:white;padding:20px;">
+      © Powered by XJ
+    </div>
+</html>
