@@ -1,0 +1,149 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <title>Clock by XJ</title> 
+       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron|Raleway|Major Mono Display|Libre Baskerville|ZCOOL KuaiLe"> 
+    </head> 
+    <body> 
+        <div id="cl" onclick="f1()"></div> 
+        <div id="tro" onclick="f2()"></div> 
+        <style> 
+body{ 
+    background-color:black; 
+    zoom: 0.3;
+} 
+#cl,#tro{ 
+    font-family:'Orbitron'; 
+    color:white; 
+    text-align:center; 
+    text-shadow:0px 0px 10px white; 
+} 
+button{ 
+    background-color:transparent; 
+    border-color:transparent; 
+} 
+#dd:active{ 
+    box-shadow:0px 0px 10px blue; 
+} 
+#gg:active{ 
+    box-shadow:0px 0px 10px blue; 
+} 
+#dd,#gg{ 
+    position:absolute; 
+    width:30px; 
+} 
+        </style> 
+        <script> 
+            alert('Message from XJ\n\n1) Tap on the clock for changing the font color\n2) Tap on the detail below the clock to change the font style') 
+            var a=document.getElementById('cl'); 
+            var t=document.getElementById('tro'); 
+var dys=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; 
+var mont=['January','Feburary','March','April','May','June','July','August','September','October','November','December'];         
+window.onload=function(){ 
+    a.style.fontSize=((window.innerWidth/2)-100)+'px'; 
+    a.style.marginTop=((window.innerWidth/2)+20)+'px'; 
+    t.style.fontSize=((window.innerWidth/2)-230)+'px'; 
+} 
+            function tic(){ 
+                let d=new Date(); 
+                let mnt=d.getMonth(); 
+                let dat=d.getDate(); 
+                let dy=d.getDay(); 
+                let yr=d.getFullYear(); 
+                let h=d.getHours(); 
+                let m=d.getMinutes(); 
+                let hr=(h<10)?'0'+h:h; 
+                let mn=(m<10)?'0'+m:m; 
+                a.innerHTML=hr+':'+mn; 
+                t.innerHTML=mont[mnt]+' '+dat+'<br/>'+dys[dy]+', '+yr; 
+                setTimeout(tic,1000); 
+            } 
+            tic(); 
+            var th=1; 
+            do{ 
+                function f1(){ 
+                    th++; 
+                    switch(th){ 
+                        case 2: 
+                          a.style.color="red"; 
+                          t.style.color="red"; 
+                          a.style.textShadow="0px 0px 10px red"; 
+                          t.style.textShadow="0px 0px 10px red"; 
+                        break; 
+                        case 3: 
+                          a.style.color="rgb(0,110,200)"; 
+                          t.style.color="rgb(0,110,200)"; 
+                          a.style.textShadow="0px 0px 10px rgb(0,110,200)"; 
+                          t.style.textShadow="0px 0px 10px rgb(0,110,200)"; 
+                        break; 
+                        case 4: 
+                          a.style.color="green"; 
+                          t.style.color="green"; 
+                          a.style.textShadow="0px 0px 10px green"; 
+                          t.style.textShadow="0px 0px 10px green"; 
+                        break; 
+                        case 5: 
+                          a.style.color="yellow"; 
+                          t.style.color="yellow"; 
+                          a.style.textShadow="0px 0px 10px yellow"; 
+                          t.style.textShadow="0px 0px 10px yellow"; 
+                        break; 
+                        default: 
+                          a.style.color="red"; 
+                          t.style.color="red"; 
+                          a.style.textShadow="0px 0px 10px red"; 
+                          t.style.textShadow="0px 0px 10px red"; 
+                    } 
+                    th=(th>6)?1:th; 
+                } 
+            }while(f1.click>0); 
+            var tk=1; 
+            do{ 
+                function f2(){ 
+                    tk++; 
+                    switch(tk){ 
+                        case 2: 
+                          a.style.fontFamily="Raleway"; 
+                          t.style.fontFamily="Raleway"; 
+                        break; 
+                        case 3: 
+                          a.style.fontFamily="Major Mono Display"; 
+                          t.style.fontFamily="Major Mono Display"; 
+                        break; 
+                        case 4: 
+                          a.style.fontFamily="Orbitron"; 
+                          t.style.fontFamily="Orbitron"; 
+                        break; 
+                        case 5: 
+                          a.style.fontFamily="Libre Baskerville"; 
+                          t.style.fontFamily="Libre Baskerville"; 
+                        break; 
+                        default: 
+                          a.style.fontFamily="ZCOOL KuaiLe"; 
+                          t.style.fontFamily="ZCOOL KuaiLe"; 
+                    } 
+                    tk=(tk>6)?1:tk; 
+                } 
+            }while(f2.click>0); 
+        </script> 
+    </body> 
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div style="background-color:green;color:white;padding:20px;">
+      © Powered by XJ
+    </div>
+</html>
