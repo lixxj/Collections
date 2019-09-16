@@ -1,4 +1,4 @@
 # Collection of some interesting small programs
-## I wrote
-# OR
-## I saw
+### I wrote
+## OR
+### I saw
