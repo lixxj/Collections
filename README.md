@@ -1,2 +1,1 @@
-# Collections
-## My collections of interesting small programs
+# Collection of some interesting small programmes
